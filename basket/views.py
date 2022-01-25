@@ -8,7 +8,7 @@ from store.models import Product
 
 
 def basket_summary(request):
-    return render(request,'store/basket/basket_summary.html',{})
+    return render(request,'store/basket/basket_summary.html',)
 
 
 def basket_add(request):
@@ -17,6 +17,11 @@ def basket_add(request):
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('productqty'))
         product = get_object_or_404(Product, id=product_id)
-        basket.add(product = product, qty = product_qty)
-        response = JsonResponse({'qty':product_qty})
+        basket.add(product=product, qty=product_qty)
+
+        
+        basketqty = basket.__len__()
+        response = JsonResponse({'qty':basketqty})
+
+
         return response
