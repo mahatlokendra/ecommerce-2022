@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from .basket  import Basket 
 from store.models import Product
 
@@ -8,7 +8,9 @@ from store.models import Product
 
 
 def basket_summary(request):
-    return render(request,'store/basket/basket_summary.html',)
+    basket = Basket(request)  # creating the copy of class Basket or instantiating the class
+
+    return render(request,'store/basket/basket_summary.html',{'basket':basket})
 
 
 def basket_add(request):
@@ -24,4 +26,15 @@ def basket_add(request):
         response = JsonResponse({'qty':basketqty})
 
 
+        return response
+
+
+
+def basket_delete(request):
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('productid'))
+        basket.delete(product=product_id)
+
+        response = JsonResponse({'sucess':True})
         return response
