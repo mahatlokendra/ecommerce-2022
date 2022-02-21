@@ -1,4 +1,3 @@
-
 from store.models import Product
 from decimal import Decimal
 
@@ -34,7 +33,9 @@ class Basket():
     
         product_id = str(product.id)
 
-        if product_id not in self.basket:
+        if product_id in self.basket:
+            self.basket[product_id]['qty'] = qty
+        else:
             self.basket[product_id]={'price':str(product.price),'qty':int(qty)}
 
         self.save()
@@ -81,6 +82,17 @@ class Basket():
             del self.basket[product_id]
             
         self.session.modified = True 
+    
+    def update(self,product,qty):
+        """
+        update values in session data
+        """
+        product_id = str(product)
+
+        if product_id in self.basket:
+            self.basket[product_id]['qty'] = qty
+        self.save()
+
 
     def save(self):
         self.session.modified = True 
